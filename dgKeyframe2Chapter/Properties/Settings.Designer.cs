@@ -38,18 +38,6 @@ namespace dgKeyframe2Chapter.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool chapterinspection {
-            get {
-                return ((bool)(this["chapterinspection"]));
-            }
-            set {
-                this["chapterinspection"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool sound {
             get {
                 return ((bool)(this["sound"]));
@@ -92,6 +80,54 @@ namespace dgKeyframe2Chapter.Properties {
             }
             set {
                 this["avant"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string prefix {
+            get {
+                return ((string)(this["prefix"]));
+            }
+            set {
+                this["prefix"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string postfix {
+            get {
+                return ((string)(this["postfix"]));
+            }
+            set {
+                this["postfix"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public int digits {
+            get {
+                return ((int)(this["digits"]));
+            }
+            set {
+                this["digits"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public int chapterNameMode {
+            get {
+                return ((int)(this["chapterNameMode"]));
+            }
+            set {
+                this["chapterNameMode"] = value;
             }
         }
     }

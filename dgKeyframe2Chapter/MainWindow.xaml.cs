@@ -23,28 +23,24 @@ namespace dgKeyframe2Chapter {
             AppModel.MW = this;
 
             //設定の復元
-            TextBox1.Text = Properties.Settings.Default.savefolder;
-            CheckBox1.IsChecked = Properties.Settings.Default.chapterinspection;
-            CheckBox3.IsChecked = Properties.Settings.Default.round;
-            CheckBox4.IsChecked = Properties.Settings.Default.sound;
-            Console.WriteLine("fpsIndex:" + Properties.Settings.Default.fps);
-            cb_fps.SelectedIndex = Properties.Settings.Default.fps;
+            switch (Properties.Settings.Default.chapterNameMode) {
+                case 0:
+                    RadioPattern.IsChecked = true;
+                    break;
+                case 1:
+                    RadioInspect.IsChecked = true;
+                    break;
+                case 2:
+                    RadioNone.IsChecked = true;
+                    break;
+            }
 
 
             DataGrid1.ItemsSource = Chapters;
 
-            //テスト用データ挿入
-            //Chapter c1 = new Chapter("100");
-            //c1.Name = "Opening";
-            //Chapters.Add(c1);
-
-            //Chapter c2 = new Chapter("200");
-            //c2.Name = "aaaa";
-            //Chapters.Add(c2);
-
         }
 
-        // TMPGEnc MPEG Editor 3.0の.keyframeファイルをchapter.txtに変換
+        // TMPGEnc MPEG Editorの.keyframeファイルをchapter.txtに変換
         private void keyframe2chapter(string filename, string extention) {
             // ファイルから１行ずつ読み込んで処理
             int hh, mm, ss, fff, hh0, mm0, ss0, fff0;
@@ -100,7 +96,7 @@ namespace dgKeyframe2Chapter {
                             fff0 = 0;
                         }
 
-                        Console.WriteLine(hh + ":" + mm + ":" + ss + "." + fff);
+                        //Console.WriteLine(hh + ":" + mm + ":" + ss + "." + fff);
 
                             // 基準値を引く
                             // 時
@@ -142,7 +138,7 @@ namespace dgKeyframe2Chapter {
                             }
 
                             int sec = (int)(((hh * 3600 + mm * 60 + ss) + (double)(fff / 1000)) * AppModel.FPS);
-                            Console.WriteLine(String.Format("{0:D2}", hh) + ":" + String.Format("{0:D2}", mm) + ":" + String.Format("{0:D2}", ss) + "." + String.Format("{0:D3}", fff));
+                            //Console.WriteLine(String.Format("{0:D2}", hh) + ":" + String.Format("{0:D2}", mm) + ":" + String.Format("{0:D2}", ss) + "." + String.Format("{0:D3}", fff));
                             Chapter c = new Chapter(String.Format("{0:D2}", hh) + ":" + String.Format("{0:D2}", mm) + ":" + String.Format("{0:D2}", ss) + "." + String.Format("{0:D3}", fff));
                             if (!String.IsNullOrEmpty(chapterName)) {
                                 c.Name = chapterName;
@@ -158,11 +154,9 @@ namespace dgKeyframe2Chapter {
                     }
                 }
             }
-            if (CheckBox1.IsChecked == true) {
-                // チャプター数からチャプター名を推測してセットする
-                inspect_chapter_name();
-            }
-
+            //チャプター名自動処理
+            inspect_chapter_name(null, null);
+        
         }
 
 
@@ -212,13 +206,20 @@ namespace dgKeyframe2Chapter {
             if (dlg.ShowDialog() == MSAPI::Dialogs.CommonFileDialogResult.Ok) {
                 Properties.Settings.Default.savefolder = dlg.FileName;
                 Properties.Settings.Default.Save();
-                TextBox1.Text = dlg.FileName;
+                //TextBox1.Text = dlg.FileName;
             }
 
         }
 
         // 保存ボタン（ファイル出力を実行）
         private void Button2_Click(object sender, RoutedEventArgs e) {
+            //保存先の存在確認
+            if (!Directory.Exists(Properties.Settings.Default.savefolder)) {
+                MessageBox.Show("保存フォルダが存在しません。");
+                return;
+            }
+
+
             string body = "";
             foreach (Chapter c in Chapters) {
                 body = body + c.TimeCode + " " + c.Name + "\r\n";
@@ -256,112 +257,94 @@ namespace dgKeyframe2Chapter {
 
 
         //順番でチャプター名を推測する
-        public void inspect_chapter_name() {
-            if (CheckBox2.IsChecked == true) {
-                // アバンタイトル有り
-                switch (Chapters.Count) {
-                    case 5: {
-                        Chapters[0].Name = "Avant-Title";
-                        Chapters[1].Name = "Opening";
-                        Chapters[2].Name = "A Part";
-                        Chapters[3].Name = "B Part";
-                        Chapters[4].Name = "Ending";
-                        break;
+        public void inspect_chapter_name(object sender, RoutedEventArgs e) {
+            if (RadioInspect.IsChecked == true) {
+                //チャプター名推測
+                Properties.Settings.Default.chapterNameMode = 1;
+                if (Properties.Settings.Default.avant == true) {
+                    // アバンタイトル有り
+                    switch (Chapters.Count) {
+                        case 5: {
+                            Chapters[0].Name = "Avant-Title";
+                            Chapters[1].Name = "Opening";
+                            Chapters[2].Name = "A Part";
+                            Chapters[3].Name = "B Part";
+                            Chapters[4].Name = "Ending";
+                            break;
+                        }
+                        case 6: {
+                            Chapters[0].Name = "Avant-Title";
+                            Chapters[1].Name = "Opening";
+                            Chapters[2].Name = "A Part";
+                            Chapters[3].Name = "B Part";
+                            Chapters[4].Name = "Ending";
+                            Chapters[5].Name = "Preview";
+                            break;
+                        }
+                        case 7: {
+                            Chapters[0].Name = "Avant-Title";
+                            Chapters[1].Name = "Opening";
+                            Chapters[2].Name = "A Part";
+                            Chapters[3].Name = "B Part";
+                            Chapters[4].Name = "Ending";
+                            Chapters[5].Name = "C Part";
+                            Chapters[6].Name = "Preview";
+                            break;
+                        }
                     }
-
-                    case 6: {
-                        Chapters[0].Name = "Avant-Title";
-                        Chapters[1].Name = "Opening";
-                        Chapters[2].Name = "A Part";
-                        Chapters[3].Name = "B Part";
-                        Chapters[4].Name = "Ending";
-                        Chapters[5].Name = "Preview";
-                        break;
-                    }
-
-                    case 7: {
-                        Chapters[0].Name = "Avant-Title";
-                        Chapters[1].Name = "Opening";
-                        Chapters[2].Name = "A Part";
-                        Chapters[3].Name = "B Part";
-                        Chapters[4].Name = "Ending";
-                        Chapters[5].Name = "C Part";
-                        Chapters[6].Name = "Preview";
-                        break;
+                } else {
+                    // アバンタイトル無し
+                    switch (Chapters.Count) {
+                        case 4: {
+                            Chapters[0].Name = "Opening";
+                            Chapters[1].Name = "A Part";
+                            Chapters[2].Name = "B Part";
+                            Chapters[3].Name = "Ending";
+                            break;
+                        }
+                        case 5: {
+                            Chapters[0].Name = "Opening";
+                            Chapters[1].Name = "A Part";
+                            Chapters[2].Name = "B Part";
+                            Chapters[3].Name = "Ending";
+                            Chapters[4].Name = "Preview";
+                            break;
+                        }
+                        case 6: {
+                            Chapters[0].Name = "Opening";
+                            Chapters[1].Name = "A Part";
+                            Chapters[2].Name = "B Part";
+                            Chapters[3].Name = "Ending";
+                            Chapters[4].Name = "C Part";
+                            Chapters[5].Name = "Preview";
+                            break;
+                        }
                     }
                 }
-            } else
-                // アバンタイトル無し
-                switch (Chapters.Count) {
-                    case 4: {
-                        Chapters[0].Name = "Opening";
-                        Chapters[1].Name = "A Part";
-                        Chapters[2].Name = "B Part";
-                        Chapters[3].Name = "Ending";
-                        break;
-                    }
-
-                    case 5: {
-                        Chapters[0].Name = "Opening";
-                        Chapters[1].Name = "A Part";
-                        Chapters[2].Name = "B Part";
-                        Chapters[3].Name = "Ending";
-                        Chapters[4].Name = "Preview";
-                        break;
-                    }
-
-                    case 6: {
-                        Chapters[0].Name = "Opening";
-                        Chapters[1].Name = "A Part";
-                        Chapters[2].Name = "B Part";
-                        Chapters[3].Name = "Ending";
-                        Chapters[4].Name = "C Part";
-                        Chapters[5].Name = "Preview";
-                        break;
-                    }
+            } else if (RadioPattern.IsChecked == true) {
+                //パターン入力
+                Properties.Settings.Default.chapterNameMode = 0;
+                string fmt = "{0:D" + Properties.Settings.Default.digits + "}";
+                //Console.WriteLine(fmt);
+                foreach (Chapter c in Chapters) {
+                    c.Name = Properties.Settings.Default.prefix + String.Format(fmt, Chapters.IndexOf(c)+1) + Properties.Settings.Default.postfix;
                 }
-        }
 
-        // チャプター推測のチェックボックス設定を保存
-        private void CheckBox1_Click(object sender, RoutedEventArgs e) {
-            Properties.Settings.Default.chapterinspection = (bool)CheckBox1.IsChecked;
-            Properties.Settings.Default.Save();
-            if (CheckBox1.IsChecked == true) {
-                inspect_chapter_name();
-                CheckBox2.IsEnabled = true;
             } else {
-                CheckBox2.IsEnabled = false;
+                //「なし」
+                Properties.Settings.Default.chapterNameMode = 2;
             }
+            Properties.Settings.Default.Save();
         }
+
 
         // 「アバンタイトル有り」チェックが変更された時
         private void CheckBox2_Click(object sender, RoutedEventArgs e) {
-            Properties.Settings.Default.avant = (bool)CheckBox2.IsChecked;
-            Properties.Settings.Default.Save();
-            inspect_chapter_name();
-        }
-
-        // 「秒単位で丸める」チェックが変更された時
-        private void CheckBox3_Click(object sender, RoutedEventArgs e) {
-            Properties.Settings.Default.round = (bool)CheckBox3.IsChecked;
-            Properties.Settings.Default.Save();
-
-            //表示更新
-            foreach (Chapter c in Chapters) {
-                c.UpdateTC();
-            }
-
-        }
-
-        // 「確認音再生」チェックが変更された時
-        private void CheckBox4_Click(object sender, RoutedEventArgs e) {
-            Properties.Settings.Default.sound = (bool)CheckBox4.IsChecked;
-            Properties.Settings.Default.Save();
+            inspect_chapter_name(null, null);
         }
 
         // FPS設定が変更された時
         private void cb_fps_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            Console.WriteLine(((ComboBox)sender).SelectedIndex + ":" + ((ComboBox)sender).SelectedItem);
             Properties.Settings.Default.fps = ((ComboBox)sender).SelectedIndex;
             Properties.Settings.Default.Save();
 
@@ -374,6 +357,18 @@ namespace dgKeyframe2Chapter {
         //終了メニュー
         private void MenuItem_Checked(object sender, RoutedEventArgs e) {
             this.Close();
+        }
+
+        //設定メニュー
+        private void MenuItem_Checked_1(object sender, RoutedEventArgs e) {
+            Settings sw = new Settings();
+            sw.ShowDialog();
+        }
+
+        //パスの手動書き換え
+        private void TextBox1_TextChanged(object sender, TextChangedEventArgs e) {
+            Properties.Settings.Default.savefolder = TextBox1.Text;
+            Properties.Settings.Default.Save();
         }
 
     }

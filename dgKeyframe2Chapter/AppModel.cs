@@ -35,7 +35,7 @@
                     MW.cb_fps.IsEnabled = true;
                 } else {
                     MW.cb_fps.IsEnabled = false;
-                    MW.CheckBox1.IsChecked = false; //ファイルにあるチャプター名を上書きしないように推測をオフにする
+                    MW.RadioNone.IsChecked = true; //ファイルにあるチャプター名を上書きしないように推測をオフにする
                 }
             }
             get { return currentMode; }

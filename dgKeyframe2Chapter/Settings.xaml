@@ -1,0 +1,53 @@
+﻿<Window x:Class="dgKeyframe2Chapter.Settings"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:dgKeyframe2Chapter"
+        xmlns:properties="clr-namespace:dgKeyframe2Chapter.Properties"
+        mc:Ignorable="d"
+        Title="dgKeyframe2Chapter設定" Height="273.179" Width="494.04" ResizeMode="NoResize" Closed="Window_Closed">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="45" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Margin="10,10,10,10">
+            <CheckBox Content="秒単位で丸める" Margin="0,0,0,10" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=round, Mode=TwoWay}" />
+            <CheckBox Content="確認音再生"  Margin="0,0,0,10" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=sound, Mode=TwoWay}"/>
+            <GroupBox Header="チャプター名パターン入力">
+                <StackPanel Orientation="Vertical">
+
+                    <StackPanel Orientation="Horizontal" Height="30" Margin="10,10,10,10">
+                        <Label Content="接頭辞:"/>
+                        <TextBox x:Name="Prefix" Width="100" Text="{Binding Source={x:Static properties:Settings.Default},Path=prefix,Mode=TwoWay}" VerticalContentAlignment="Center" FontSize="14" TextChanged="UpdatePreview" />
+                        <Label Content="連番桁数:" Margin="10,0,0,0"/>
+                        <TextBox x:Name="TxtDigits" Width="32" Text="{Binding Digits, Mode=OneWay}" HorizontalContentAlignment="Center" IsReadOnly="True" VerticalContentAlignment="Center" FontSize="14"/>
+                        <StackPanel Orientation="Vertical">
+                            <Button x:Name="BtnUp" Content="▲" Height="15" FontSize="8" Click="Button_Click_2" />
+                            <Button x:Name="BtnDown" Content="▼" Height="15" FontSize="8" Click="Button_Click_3" />
+                        </StackPanel>
+                        <Label Content="接尾辞:" Margin="10,0,0,0"/>
+                        <TextBox x:Name="Postfix" Width="100" Text="{Binding Source={x:Static properties:Settings.Default},Path=postfix,Mode=TwoWay}"  VerticalContentAlignment="Center" FontSize="14" TextChanged="UpdatePreview"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="10,0,10,0">
+                        <Label Content="プレビュー: "/>
+                        <StackPanel Orientation="Vertical" Width="370">
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="1番目のチャプター " Width="110" Height="25" VerticalContentAlignment="Center"/>
+                                <Label x:Name="TxtPreview1" Foreground="#444" Height="25" VerticalContentAlignment="Center" Content="{Binding Preview1, Mode=OneWay}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="10番目のチャプター " Width="110" Height="25" VerticalContentAlignment="Center"/>
+                                <Label x:Name="TxtPreview10" Foreground="#444" Height="25" VerticalContentAlignment="Center" Content="{Binding Preview10, Mode=OneWay}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right" Margin="0,10,10,10">
+            <Button Content="OK" Width="70" Margin="10,0,0,0" Click="Button_Click_1" />
+        </StackPanel>
+    </Grid>
+</Window>
