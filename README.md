@@ -1,0 +1,2 @@
+# dgKeyframe2Chapter
+Pegasys社のTMPGEncシリーズで書き出された.keyframeファイルを、mp4chap.exeで利用できる.chapters.txt形式に変換するツール
