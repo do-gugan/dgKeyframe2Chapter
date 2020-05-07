@@ -45,4 +45,4 @@ TMPGEncシリーズ上でのチャプター情報（タイムコード）を流�
 - .NET Framework 4.8
 
 # ダウンロード
-「Release」タブより最新版のzipファイルを取得してください。
+「[Release](https://github.com/do-gugan/dgKeyframe2Chapter/releases)」タブより最新版のzipファイルを取得してください。
