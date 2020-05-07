@@ -16,7 +16,7 @@ namespace dgKeyframe2Chapter {
 
         public String TimeCode {
             get {
-                if (AppModel.MW.CheckBox3.IsChecked == true) {
+                if (Properties.Settings.Default.round == true) {
                     //丸める
                     return timeCode.Substring(0,9) + "000";
                 } else {
